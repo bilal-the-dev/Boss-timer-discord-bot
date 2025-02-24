@@ -45,8 +45,8 @@ export default {
         "Please enter correct format for time like 5 min, 5 hrs, 1 day!"
       );
 
-    if (boss.bossName) updateBossById.run(timeInMs, boss.rowid);
-    if (!boss.bossName) createBoss.run(bossName, timeInMs, Date.now());
+    if (boss) updateBossById.run(timeInMs, boss.rowid);
+    if (!boss) createBoss.run(bossName, timeInMs, Date.now());
 
     await interaction.editReply("Success, saved the boss!");
   },

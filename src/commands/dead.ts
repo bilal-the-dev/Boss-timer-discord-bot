@@ -44,8 +44,7 @@ export default {
 
     const bossExists = getBossByName.get(bossName) as bossRow;
 
-    if (!bossExists.bossName)
-      throw new Error("Boss with that name doest not exists");
+    if (!bossExists) throw new Error("Boss with that name doest not exists");
 
     let timeInMs = bossExists.deadTimestamp;
     let shouldPlus = true;
@@ -63,7 +62,7 @@ export default {
         );
     }
 
-    if (bossTimerExists.bossName) {
+    if (bossTimerExists) {
       if (!time) throw new Error("Enter new time for the boss to update it");
 
       const updatedTime = shouldPlus
@@ -89,7 +88,7 @@ export default {
       );
     }
 
-    if (!bossTimerExists.bossName) {
+    if (!bossTimerExists) {
       if (time) {
         console.log(`IN FIRST TIME: ${timeInMs}`);
         shouldPlus

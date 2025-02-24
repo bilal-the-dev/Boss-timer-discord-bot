@@ -33,7 +33,7 @@ export const setBossTimer = (
       console.log("running timer");
       const bossTimer = getBossTimerById.get(rowId) as bossTimerRow;
 
-      if (!bossTimer.bossName)
+      if (!bossTimer)
         return console.log(
           `Could not find row for ${bossName} when timer finished`
         );
