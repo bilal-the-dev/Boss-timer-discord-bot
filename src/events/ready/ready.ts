@@ -11,6 +11,8 @@ export default async (client: Client<true>) => {
 
   const bossTimerRows = getAllBossTimers.all() as Array<bossTimerRow>;
 
+  console.log(bossTimerRows);
+
   for (const row of bossTimerRows) {
     setBossTimer(client, row.bossName, row.rowid, row.deadTimestamp, true, row);
   }

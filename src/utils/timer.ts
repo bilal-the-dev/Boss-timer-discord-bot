@@ -29,7 +29,8 @@ export const setBossTimer = (
 
   const timer = setTimeout(async () => {
     try {
-      console.log("running timer");
+      console.log(`Running timer for ${bossName}`);
+
       const bossTimer = getBossTimerById.get(rowId) as bossTimerRow;
 
       if (!bossTimer)
@@ -53,8 +54,8 @@ export const setBossTimer = (
         .send(`@everyone timer finished for boss **${bossTimer.bossName}**!`)
         .catch((e) => e);
 
+      console.log(resOrErr.code);
       if (resOrErr instanceof DiscordAPIError && resOrErr.code === 50001) {
-        console.log(resOrErr.code);
         console.log(resOrErr);
         return deleteBossTimerById.run(bossTimer.rowid);
       }
