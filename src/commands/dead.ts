@@ -11,7 +11,11 @@ import {
   getBossTimerBossName,
   updateBossTimerById,
 } from "../database/queries.js";
-import { generateCurrentTimerEmbed, setBossTimer } from "../utils/timer.js";
+import {
+  generateCurrentTimerEmbed,
+  removeOldTimerIfExists,
+  setBossTimer,
+} from "../utils/timer.js";
 
 export default {
   name: "dead",
@@ -67,6 +71,7 @@ export default {
     if (bossTimerExists) {
       if (!time) {
         deleteBossTimerById.run(bossTimerExists.rowid);
+        removeOldTimerIfExists(bossName);
         shouldResetAndStartNew = true;
       }
 

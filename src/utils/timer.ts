@@ -69,6 +69,14 @@ export const setBossTimer = (
   timers[bossName] = timer;
 };
 
+export const removeOldTimerIfExists = (bossName: string) => {
+  const oldTimer = timers[bossName];
+
+  console.log(`Removing timer for ${bossName}, exists: ${!!oldTimer}`);
+  if (oldTimer) clearTimeout(oldTimer);
+};
+
+
 export const generateCurrentTimerEmbed = async () => {
   const timers = getAllBossTimers.all() as Array<bossTimerRow>;
 
