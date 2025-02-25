@@ -5,6 +5,7 @@ import { ms } from "enhanced-ms";
 import { bossRow, extendedAPICommand } from "../utils/typings/types.js";
 import {
   createBossTimer,
+  deleteBossTimerById,
   getAllBosses,
   getBossByName,
   getBossTimerBossName,
@@ -52,6 +53,7 @@ export default {
     if (time?.startsWith("-")) shouldPlus = false;
 
     const bossTimerExists = getBossTimerBossName.get(bossName) as bossTimerRow;
+    let shouldResetAndStartNew = false;
 
     if (time) {
       timeInMs = ms(time);
@@ -63,32 +65,37 @@ export default {
     }
 
     if (bossTimerExists) {
-      if (!time) throw new Error("Enter new time for the boss to update it");
+      if (!time) {
+        deleteBossTimerById.run(bossTimerExists.rowid);
+        shouldResetAndStartNew = true;
+      }
 
-      const updatedTime = shouldPlus
-        ? bossTimerExists.deadTimestamp + timeInMs
-        : bossTimerExists.deadTimestamp - timeInMs;
+      if (time) {
+        const updatedTime = shouldPlus
+          ? bossTimerExists.deadTimestamp + timeInMs
+          : bossTimerExists.deadTimestamp - timeInMs;
 
-      updateBossTimerById.run(
-        updatedTime,
-        time,
-        Date.now(),
-        bossTimerExists.rowid
-      );
+        updateBossTimerById.run(
+          updatedTime,
+          time,
+          Date.now(),
+          bossTimerExists.rowid
+        );
 
-      console.log(updatedTime);
+        console.log(updatedTime);
 
-      setBossTimer(
-        client,
-        bossName,
-        bossTimerExists.rowid,
-        updatedTime,
-        true,
-        bossTimerExists
-      );
+        setBossTimer(
+          client,
+          bossName,
+          bossTimerExists.rowid,
+          updatedTime,
+          true,
+          bossTimerExists
+        );
+      }
     }
 
-    if (!bossTimerExists) {
+    if (!bossTimerExists || shouldResetAndStartNew) {
       if (time) {
         console.log(`IN FIRST TIME: ${timeInMs}`);
         shouldPlus
