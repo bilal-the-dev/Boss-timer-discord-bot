@@ -1,5 +1,4 @@
 import { Client, EmbedBuilder } from "discord.js";
-import ms from "enhanced-ms";
 
 import {
   deleteBossTimerById,
@@ -40,16 +39,21 @@ export const setBossTimer = (
 
       const channel = client.channels.cache.get(bossTimer.channelId);
 
-      if (!channel)
+      if (!channel){
+
+        deleteBossTimerById.run(bossTimer.rowid);
+
         return console.log(
           `Channel not found for ${bossName} when time finished`
         );
+      }
+
 
       if (!channel.isSendable()) return;
 
       await channel.send(
         `@everyone timer finished for boss **${bossTimer.bossName}**!`
-      );
+      )
 
       deleteBossTimerById.run(bossTimer.rowid);
     } catch (error) {
