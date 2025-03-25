@@ -35,9 +35,11 @@ export default {
       type: ApplicationCommandOptionType.String,
     },
   ],
-  autocomplete: async () => {
+  autocomplete: async (interaction) => {
     const bosses = getAllBosses.all() as bossRow[];
-    return bosses.map((b) => b.bossName);
+
+    
+    return bosses.filter(b => b.bossName.toLowerCase().startsWith(interaction.options.getFocused().toLowerCase())).map((b) => b.bossName);
   },
   execute: async (interaction) => {
     const { options, channelId, client } = interaction;
