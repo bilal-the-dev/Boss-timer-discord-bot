@@ -18,7 +18,7 @@ WHERE ROWID = ?;
 `);
 
 export const createBossTimer = database.prepare(
-  `INSERT INTO bossTimers (bossName, channelId, deadTimestamp, prevDeadTimestamp, createdAt) VALUES (?, ?, ? , ?, ?)
+  `INSERT INTO bossTimers (bossName, channelId, deadTimestamp, prevDeadTimestamp, seconds, createdAt) VALUES (?, ?, ? , ?, ?, ?)
   RETURNING ROWID`
 );
 
@@ -36,7 +36,7 @@ export const getBossTimerById = database.prepare(`
 
 export const updateBossTimerById = database.prepare(`
 UPDATE bossTimers
-SET deadTimestamp = ?, prevDeadTimestamp = ? , updatedAt = ?
+SET deadTimestamp = ?, prevDeadTimestamp = ? , updatedAt = ?, seconds = ?
 WHERE ROWID = ?;
 `);
 

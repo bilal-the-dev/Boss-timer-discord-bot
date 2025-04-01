@@ -76,7 +76,6 @@ export const removeOldTimerIfExists = (bossName: string) => {
   if (oldTimer) clearTimeout(oldTimer);
 };
 
-
 export const generateCurrentTimerEmbed = async () => {
   const timers = getAllBossTimers.all() as Array<bossTimerRow>;
 
@@ -88,7 +87,7 @@ export const generateCurrentTimerEmbed = async () => {
     (t) =>
       (str += `${t.bossName} <#${t.channelId}> <t:${Math.floor(
         (t.createdAt + t.deadTimestamp) / 1000
-      )}:R>\n\n`)
+      )}:R>${t.seconds ? `at ${t.seconds} seconds` : ""}\n\n`)
   );
   return new EmbedBuilder().setDescription(str);
 };

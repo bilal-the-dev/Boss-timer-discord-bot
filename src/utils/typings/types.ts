@@ -26,5 +26,6 @@ export interface bossRow {
 export interface bossTimerRow extends bossRow {
   channelId: string;
   deadTimestamp: number;
+  seconds: number | null;
   updatedAt?: number;
 }

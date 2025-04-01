@@ -34,12 +34,22 @@ export default {
         "[OPTIONAL] enter the time in format (5 mins, 5h 5mins, 1d, 3weeks etc)",
       type: ApplicationCommandOptionType.String,
     },
+    {
+      name: "seconds",
+      description: "[OPTIONAL] enter the seconds in format (10, 40, 50)",
+      type: ApplicationCommandOptionType.Integer,
+    },
   ],
   autocomplete: async (interaction) => {
     const bosses = getAllBosses.all() as bossRow[];
 
-    
-    return bosses.filter(b => b.bossName.toLowerCase().startsWith(interaction.options.getFocused().toLowerCase())).map((b) => b.bossName);
+    return bosses
+      .filter((b) =>
+        b.bossName
+          .toLowerCase()
+          .startsWith(interaction.options.getFocused().toLowerCase())
+      )
+      .map((b) => b.bossName);
   },
   execute: async (interaction) => {
     const { options, channelId, client } = interaction;
@@ -48,10 +58,11 @@ export default {
 
     const bossName = options.getString("boss_name", true);
     const time = options.getString("time");
+    let secondsForBossDead = options.getInteger("seconds"); // no effect on functionality of bot just dummy
 
     const bossExists = getBossByName.get(bossName) as bossRow;
 
-    if (!bossExists) throw new Error("Boss with that name doest not exists");
+    if (!bossExists) throw new Error("Boss with that name does not exists");
 
     let timeInMs = bossExists.deadTimestamp;
     let shouldPlus = true;
@@ -71,6 +82,7 @@ export default {
     }
 
     if (bossTimerExists) {
+      secondsForBossDead ??= bossTimerExists.seconds; // if user did not put time so we just put old when creating/updating
       if (!time) {
         deleteBossTimerById.run(bossTimerExists.rowid);
         removeOldTimerIfExists(bossName);
@@ -86,6 +98,7 @@ export default {
           updatedTime,
           time,
           Date.now(),
+          secondsForBossDead,
           bossTimerExists.rowid
         );
 
@@ -114,6 +127,7 @@ export default {
         channelId,
         timeInMs,
         time,
+        secondsForBossDead,
         Date.now()
       ) as bossTimerRow;
 

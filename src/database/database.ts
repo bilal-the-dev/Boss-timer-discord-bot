@@ -22,6 +22,10 @@ create table IF NOT EXISTS bossTimers (
 );
 `;
 
+const addSecondsColumnQuery = `ALTER TABLE bossTimers ADD seconds INTEGER`;
+
 database.exec(initDatabase);
+
+// database.exec(addSecondsColumnQuery);
 
 export default database;
